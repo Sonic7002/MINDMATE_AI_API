@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
-from ..msg import Msg
-from ..response import generate_msg
-from ..deps import get_msg_service
+from msg import Msg, MsgRead
+from response import generate_msg
+from deps import get_msg_service
 
 router = APIRouter(tags=["msgs"])
 
-@router.get("/", response_model=Msg)
+@router.post("/", response_model=MsgRead)
 def get_reply(data: list[Msg], service: generate_msg = Depends(get_msg_service)):
     try:
         return service(data)

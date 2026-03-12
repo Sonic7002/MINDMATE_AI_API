@@ -12,7 +12,7 @@ def generate_msg(msgs: list[Msg]) -> MsgRead:
     - If user expresses self-harm or suicidal intent:
     - Respond with empathy
     - Encourage seeking professional help
-    - Suggest contacting local helplines
+    - Suggest contacting local helplines (India)
     - Do NOT provide instructions or validation for self-harm
 
     Tone:
@@ -26,8 +26,10 @@ def generate_msg(msgs: list[Msg]) -> MsgRead:
 
     return generate_response(prompt, msgs)
 
-def generate_convo(msg: Msg) -> MsgRead:
-    if msg.role == MsgRole.USER:
+def generate_convo(msgs: list[Msg]) -> MsgRead:
+    if len(msgs) != 1:
+        raise ValueError("Number of msgs ust be one")
+    if msgs[0].role == MsgRole.USER:
         prompt = """You are generating a title for a chat conversation.
 
         Given the first message of the conversation, generate a short, clear, descriptive title.
@@ -41,6 +43,6 @@ def generate_convo(msg: Msg) -> MsgRead:
         - Output ONLY the title
         """
 
-        return generate_response(prompt, msg)
+        return generate_response(prompt, msgs)
     else:
         raise ValueError("Invalid role must be user")

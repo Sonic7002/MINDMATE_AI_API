@@ -4,10 +4,9 @@ from pydantic import BaseModel, field_validator, ValidationInfo
 class MsgRole(str, Enum):
     ASSISTANT = "assistant"
     USER = "user"
-    SYSTEM = "system"
 
 class Msg(BaseModel):
-    role = MsgRole
+    role : MsgRole
     content: str
 
     @field_validator("content")
@@ -18,7 +17,7 @@ class Msg(BaseModel):
         return text
     
 class MsgRead(BaseModel):
-    role = MsgRole
+    role : MsgRole
     content: str
     model: str
 

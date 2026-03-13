@@ -2,7 +2,7 @@ from enum import Enum
 from pydantic import BaseModel, field_validator, ValidationInfo
 
 class MsgRole(str, Enum):
-    ASSISTANT = "assistant"
+    MODEL = "model"
     USER = "user"
 
 class Msg(BaseModel):

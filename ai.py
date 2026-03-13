@@ -1,6 +1,34 @@
 from msg import Msg, MsgRole, MsgRead
 import requests
 import os
+from google import genai
+from google.genai import types
+
+client = genai.Client()
+
+def generate_gemini(prompt: str, msgs: list[Msg]) -> MsgRead:
+    try:
+        data = [
+            types.Content(
+                role=MsgRole.USER,
+                parts=[types.Part(text=f"INSTRUCTIONS:\n{prompt}")]
+            )
+        ]
+
+        for msg in msgs:
+            data.append(
+                types.Content(
+                    role=msg.role,
+                    parts=[types.Part(text=msg.content)]
+                )
+            )
+
+            response = client.models.generate_content(model="gemini-2.5-flash-lite", contents=data)
+            reply = MsgRead(role=MsgRole.MODEL, content=response.text, model="google/gemini2.5")
+            print("used model: gemini 2.5")
+            return reply
+    except:
+        raise ValueError("An error as occured try again")
 
 
 def generate_response(prompt: str, msgs: list[Msg]) -> MsgRead:
@@ -33,25 +61,21 @@ def generate_response(prompt: str, msgs: list[Msg]) -> MsgRead:
                     "messages": data
                 }
             )
-            if response.status_code == 200:
+            content = response.json()
+            if response.status_code == 200 and "error" not in content:
                 used_model = model
-                try:
-                    error = response.json()
-                    print(error)
-                    if error["error"]["code"] == 500:
-                        continue
-                except:
-                    pass
+                print("used model:", used_model)
                 break
+            else:
+                continue
         except:
             continue
 
     if response.status_code == 200:
         try:
             reply = response.json()
-            print (reply)
-            return MsgRead(role=MsgRole.ASSISTANT, content=(reply["choices"][0]["message"]["content"]), model=used_model)
+            return MsgRead(role=MsgRole.MODEL, content=reply["choices"][0]["message"]["content"], model=used_model)
         except:
-            raise ValueError("An error has occured please try again")
+            generate_gemini(prompt, msgs)
     else:
-        raise ValueError("An error as occured try again")
+        generate_gemini(prompt, msgs)

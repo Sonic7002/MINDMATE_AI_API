@@ -23,10 +23,10 @@ def generate_gemini(prompt: str, msgs: list[Msg]) -> MsgRead:
                 )
             )
 
-            response = client.models.generate_content(model="gemini-2.5-flash-lite", contents=data)
-            reply = MsgRead(role=MsgRole.MODEL, content=response.text, model="google/gemini2.5")
-            print("used model: gemini 2.5")
-            return reply
+        response = client.models.generate_content(model="gemini-2.5-flash-lite", contents=data)
+        reply = MsgRead(role=MsgRole.MODEL, content=response.text, model="google/gemini2.5")
+        print("used model: gemini 2.5")
+        return reply
     except:
         raise ValueError("An error as occured try again")
 
@@ -76,6 +76,6 @@ def generate_response(prompt: str, msgs: list[Msg]) -> MsgRead:
             reply = response.json()
             return MsgRead(role=MsgRole.MODEL, content=reply["choices"][0]["message"]["content"], model=used_model)
         except:
-            generate_gemini(prompt, msgs)
+            return generate_gemini(prompt, msgs)
     else:
-        generate_gemini(prompt, msgs)
+        return generate_gemini(prompt, msgs)

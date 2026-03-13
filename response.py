@@ -90,8 +90,10 @@ Healing Together:
 
 It's okay to feel what you're feeling. Let's work through these emotions step by step, and I'll help you find practical ways to feel better and regain balance. 🌈💖
 """
-
-    return generate_response(prompt, msgs)
+    if len(msgs) >= 1:
+        return generate_response(prompt, msgs)
+    else:
+        raise ValueError("No input messages")
 
 def generate_convo(msgs: list[Msg]) -> MsgRead:
     if len(msgs) != 1:

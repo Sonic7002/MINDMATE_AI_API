@@ -6,6 +6,7 @@ from google.genai import types
 
 client = genai.Client()
 
+
 def generate_gemini(prompt: str, msgs: list[Msg]) -> MsgRead:
     try:
         data = [
@@ -28,54 +29,55 @@ def generate_gemini(prompt: str, msgs: list[Msg]) -> MsgRead:
         print("used model: gemini 2.5")
         return reply
     except:
-        raise ValueError("An error as occured try again")
+        raise ValueError("An error has occured")
 
 
 def generate_response(prompt: str, msgs: list[Msg]) -> MsgRead:
-    OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
-    models = os.getenv("MODELS").split(',')
+    NVIDIA_API_KEY = os.getenv("NVIDIA_API_KEY")
+    url = "https://integrate.api.nvidia.com/v1/chat/completions"
 
-    data = [
+    headers = {
+    "Authorization": f"Bearer {NVIDIA_API_KEY}",
+    "Content-Type": "application/json"
+    }
+
+    content = [
         {
-            "role": MsgRole.USER,
+            "role": "system",
             "content": prompt
         }
     ]
 
     for msg in msgs:
-        data.append(
-            {
-                "role": msg.role,
-                "content": msg.content
-            }
-        )
-
-    used_model = "not used"
-    for model in models:
-        try:
-            response = requests.post(
-                url="https://openrouter.ai/api/v1/chat/completions",
-                headers={"Authorization": f"Bearer {OPENROUTER_API_KEY}"},
-                json={
-                    "model": model,
-                    "messages": data
+        if msg.role == MsgRole.MODEL:
+            content.append(
+                {
+                    "role": "assistant",
+                    "content": msg.content
                 }
             )
-            content = response.json()
-            if response.status_code == 200 and "error" not in content:
-                used_model = model
-                print("used model:", used_model)
-                break
-            else:
-                continue
-        except:
-            continue
+        else:
+            content.append(
+                {
+                    "role": msg.role,
+                    "content": msg.content
+                }
+            )
+    
+    try:
+        data = {
+            "model": "openai/gpt-oss-120b",
+            "messages": content
+        }
 
-    if response.status_code == 200:
-        try:
-            reply = response.json()
-            return MsgRead(role=MsgRole.MODEL, content=reply["choices"][0]["message"]["content"], model=used_model)
-        except:
-            return generate_gemini(prompt, msgs)
-    else:
+        response = requests.post(url, headers=headers, json=data)
+        content = response.json()
+        print(content)
+        reply = MsgRead(role=MsgRole.MODEL, content=content['choices'][0]['message']['content'], model="openai")
+        print("used model: openai")
+        return reply
+    except:
         return generate_gemini(prompt, msgs)
+
+
+

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
-from msg import Msg, MsgRead
-from response import generate_msg
-from deps import get_msg_service
+from schemas.msg import Msg, MsgRead
+from services.response import generate_msg
+from routes.deps import get_msg_service
 
 router = APIRouter(tags=["msgs"])
 

@@ -1,4 +1,4 @@
-from msg import Msg, MsgRole, MsgRead
+from schemas.msg import Msg, MsgRole, MsgRead
 import requests
 import os
 from google import genai

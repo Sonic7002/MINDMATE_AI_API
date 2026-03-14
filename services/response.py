@@ -1,5 +1,5 @@
-from msg import Msg, MsgRead, MsgRole
-from ai import generate_response
+from schemas.msg import Msg, MsgRead, MsgRole
+from ai.ai import generate_response
 
 def generate_msg(msgs: list[Msg]) -> MsgRead:
     

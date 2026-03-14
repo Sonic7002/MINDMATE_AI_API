@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
-from msg import Msg, MsgRead
-from response import generate_convo
-from deps import get_convo_service
+from schemas.msg import Msg, MsgRead
+from services.response import generate_convo
+from routes.deps import get_convo_service
 
 router = APIRouter(prefix="/convo",tags=["convo"])
 

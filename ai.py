@@ -72,7 +72,6 @@ def generate_response(prompt: str, msgs: list[Msg]) -> MsgRead:
 
         response = requests.post(url, headers=headers, json=data)
         content = response.json()
-        print(content)
         reply = MsgRead(role=MsgRole.MODEL, content=content['choices'][0]['message']['content'], model="openai")
         print("used model: openai")
         return reply

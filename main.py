@@ -6,6 +6,12 @@ import os
 
 app = FastAPI(title="MINDMATE AI API")
 
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+NVIDIA_API_KEY = os.getenv("NVIDIA_API_KEY")
+
+if not GEMINI_API_KEY or not NVIDIA_API_KEY:
+    raise RuntimeError("Fatal Eror! one or more API keys are missing.")
+
 origins = os.getenv("ALLOWED_ORIGINS", "*")
 
 if origins == "*":

@@ -12,12 +12,10 @@ NVIDIA_API_KEY = os.getenv("NVIDIA_API_KEY")
 if not GEMINI_API_KEY or not NVIDIA_API_KEY:
     raise RuntimeError("Fatal Eror! one or more API keys are missing.")
 
-origins = os.getenv("ALLOWED_ORIGINS", "*")
-
-if origins == "*":
-    origins = ["*"]
-else:
-    origins = origins.split(",")
+origins = [
+    "http://localhost:5173",
+    "https://mindmate-ai-jade.vercel.app"
+]
 
 app.add_middleware(CORSMiddleware, allow_origins=origins, allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 

@@ -5,6 +5,19 @@ It integrates large language models and neural text-to-speech to provide a natur
 
 The backend is built using FastAPI and integrates AI models through NVIDIA NIM APIs and Google AI services.
 
+## 🖥️ Deployment
+
+- deployed: <https://mindmate-ai-api.onrender.com>
+
+
+open api docs: 
+- <https://mindmate-ai-api.onrender.com/docs>
+
+ or
+
+- <https://mindmate-ai-api.onrender.com/scalar_docs>
+
+
 ## ✨ Features
 
 - 💬 AI chat responses
@@ -290,30 +303,31 @@ Interactive documentation available at:
 ```bash
 mindmate-ai
 ├── ai
-│   ├── ai.py
-│   └── __init__.py
-├── main.py
-├── README.md
-├── requirements.txt
+│   ├── __init__.py
+│   └── ai.py
 ├── routes
-│   ├── audio_route.py
-│   ├── convo_route.py
+│   ├── __init__.py
 │   ├── deps.py
-│   ├── health.py
-│   ├── __init__.py
+│   ├── convo_route.py
 │   ├── msg_route.py
-│   └── scalar_docs.py
+│   ├── audio_route.py
+│   ├── scalar_docs.py
+│   └── health.py
 ├── schemas
-│   ├── audio.py
 │   ├── __init__.py
+│   ├── audio.py
 │   └── msg.py
 ├── scripts
 │   ├── build.sh
 │   └── tts.sh
-└── services
-    ├── audio_response.py
-    ├── __init__.py
-    └── response.py
+├── services
+│   ├── __init__.py
+│   ├── audio_response.py
+│   └── response.py
+├── main.py
+├── README.md
+├── LICENCE
+└── requirements.txt
 ```
 
 ## 🧩 System Design Highlights

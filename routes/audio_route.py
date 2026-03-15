@@ -28,5 +28,3 @@ def get_text(file: UploadFile = File(...), service: AudioService = Depends(get_a
         return {"transcript": text}
     except ValueError as e:
         raise HTTPException(status_code=500, detail=str(e))
-
-    

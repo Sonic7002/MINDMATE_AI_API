@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends, BackgroundTasks
+from fastapi import APIRouter, HTTPException, Depends, BackgroundTasks, UploadFile, File
 from schemas.audio import Audio
 from fastapi.responses import FileResponse
 from services.audio_response import AudioService
@@ -18,3 +18,15 @@ def get_audio(data: Audio, background_tasks: BackgroundTasks, service: AudioServ
         return response
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+@router.post("/text")
+def get_text(file: UploadFile = File(...), service: AudioService = Depends(get_audio_service)):
+    if not file.filename.endswith(".wav"):
+        raise HTTPException(status_code=400, detail="Only .wav files allowed")
+    try:
+        text = service.generate_text(file)
+        return {"transcript": text}
+    except ValueError as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+    
